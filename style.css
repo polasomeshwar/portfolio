@@ -178,7 +178,7 @@ h3,
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 30px;
+    gap: 15px;
     align-items: center;
 }
 
@@ -1351,4 +1351,35 @@ body.light-mode .hamburger span {
 
 body.light-mode .about-text strong {
     color: #000;
+}
+
+body.light-mode .project-content h3 {
+    color: #000;
+}
+
+body.light-mode .nav-links a:hover {
+    color: #fff;
+}
+
+/* Nav Overlay */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 140;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+body.light-mode .nav-overlay {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.nav-overlay.show {
+    opacity: 1;
+    visibility: visible;
 }

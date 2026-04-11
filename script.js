@@ -200,3 +200,15 @@ if (navOverlay) {
 navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', closeMenu);
 });
+
+// Configure anchor links to work smoothly with Lenis
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+        if (target) {
+            lenis.scrollTo(target);
+        }
+    });
+});
