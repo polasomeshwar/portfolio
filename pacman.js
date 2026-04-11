@@ -23,6 +23,7 @@ const initialMap = [
 
 let mapGame = [];
 let pacman = { x: 1, y: 1, vx: 0, vy: 0, nextVx: 0, nextVy: 0, xOffset: 0, yOffset: 0, speed: 2 };
+let ghost = { x: 18, y: 7, vx: -1, vy: 0, speed: 1.5, xOffset: 0, yOffset: 0 };
 let gameScore = 0;
 let totalDots = 0;
 let isPlaying = false;
@@ -34,6 +35,7 @@ function resetGame() {
     totalDots = mapGame.flat().filter(cell => cell === 0).length;
     gameScore = 0;
     pacman = { x: 1, y: 1, vx: 0, vy: 0, nextVx: 0, nextVy: 0, xOffset: 0, yOffset: 0, speed: 2 };
+    ghost = { x: 18, y: 7, vx: -1, vy: 0, speed: 1.5, xOffset: 0, yOffset: 0 };
     scoreDisplay.innerText = `Score: ${gameScore}/${totalDots}`;
     startScreen.style.display = 'none';
     isPlaying = true;
@@ -99,6 +101,28 @@ function drawGame() {
     ctxGame.arc(px, py, CELL_SIZE / 2 - 2, angle + mouthOpen * Math.PI, angle + (2 - mouthOpen) * Math.PI);
     ctxGame.lineTo(px, py);
     ctxGame.fill();
+
+    // Draw Ghost
+    const gx = ghost.x * CELL_SIZE + ghost.xOffset + CELL_SIZE / 2;
+    const gy = ghost.y * CELL_SIZE + ghost.yOffset + CELL_SIZE / 2;
+    const gRadius = CELL_SIZE / 2 - 2;
+
+    ctxGame.fillStyle = fg;
+    ctxGame.beginPath();
+    ctxGame.arc(gx, gy, gRadius, Math.PI, 0); // half-circle top
+    ctxGame.lineTo(gx + gRadius, gy + gRadius);
+    ctxGame.lineTo(gx + gRadius * 0.33, gy + gRadius - 3); // zig zag skirt
+    ctxGame.lineTo(gx - gRadius * 0.33, gy + gRadius);
+    ctxGame.lineTo(gx - gRadius, gy + gRadius - 3);
+    ctxGame.closePath();
+    ctxGame.fill();
+
+    // Ghost Eyes
+    ctxGame.fillStyle = bg;
+    ctxGame.beginPath();
+    ctxGame.arc(gx - 3, gy - 2, 2, 0, Math.PI * 2);
+    ctxGame.arc(gx + 3, gy - 2, 2, 0, Math.PI * 2);
+    ctxGame.fill();
 }
 
 function updateGame() {
@@ -144,6 +168,55 @@ function updateGame() {
         }
     }
 
+    // Update Ghost Component
+    if (ghost.xOffset === 0 && ghost.yOffset === 0) {
+        const possibleMoves = [];
+        const directions = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+        for (let dir of directions) {
+            const dx = dir[0], dy = dir[1];
+            // Prevent immediate U-turn unless trapped
+            if (dx === -ghost.vx && dy === -ghost.vy && (ghost.vx !== 0 || ghost.vy !== 0)) continue;
+
+            // Check boundary and wall validity
+            if (mapGame[ghost.y + dy] && mapGame[ghost.y + dy][ghost.x + dx] !== 1) {
+                possibleMoves.push({ vx: dx, vy: dy });
+            }
+        }
+
+        if (possibleMoves.length === 0) {
+            ghost.vx = -ghost.vx;
+            ghost.vy = -ghost.vy;
+        } else {
+            // Pick a random available direction to wander
+            const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+            ghost.vx = move.vx;
+            ghost.vy = move.vy;
+        }
+    }
+
+    ghost.xOffset += ghost.vx * ghost.speed;
+    ghost.yOffset += ghost.vy * ghost.speed;
+
+    if (Math.abs(ghost.xOffset) >= CELL_SIZE) {
+        ghost.x += Math.sign(ghost.xOffset);
+        ghost.xOffset = 0;
+    }
+    if (Math.abs(ghost.yOffset) >= CELL_SIZE) {
+        ghost.y += Math.sign(ghost.yOffset);
+        ghost.yOffset = 0;
+    }
+
+    // Check collision state
+    const pdx = (pacman.x * CELL_SIZE + pacman.xOffset) - (ghost.x * CELL_SIZE + ghost.xOffset);
+    const pdy = (pacman.y * CELL_SIZE + pacman.yOffset) - (ghost.y * CELL_SIZE + ghost.yOffset);
+    if (Math.sqrt(pdx * pdx + pdy * pdy) < CELL_SIZE - 4) {
+        isPlaying = false;
+        startScreen.innerText = "Game Over! Tap/Click to retry.";
+        startScreen.style.display = 'flex';
+        // End frame rendering loop instantly
+        return;
+    }
+
     drawGame();
     if (isPlaying) requestAnimationFrame(updateGame);
 }
@@ -156,10 +229,16 @@ canvasGame.addEventListener('touchstart', (e) => {
     if (!isPlaying) return;
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
-}, { passive: true });
+}, { passive: false });
+
+canvasGame.addEventListener('touchmove', (e) => {
+    if (!isPlaying) return;
+    e.preventDefault(); // Lock scroll while playing
+}, { passive: false });
 
 canvasGame.addEventListener('touchend', (e) => {
     if (!isPlaying) return;
+    e.preventDefault();
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = e.changedTouches[0].clientY - touchStartY;
 
@@ -172,6 +251,6 @@ canvasGame.addEventListener('touchend', (e) => {
         if (dy > 0) { pacman.nextVx = 0; pacman.nextVy = 1; }
         else { pacman.nextVx = 0; pacman.nextVy = -1; }
     }
-}, { passive: true });
+}, { passive: false });
 
 drawGame(); // initial draw
