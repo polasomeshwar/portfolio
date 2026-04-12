@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="DripRead - Build a consistent reading habit with daily book summaries" />
+    <title>DripRead | Pola Someshwar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body class="light-mode">
+    <canvas id="particles-canvas"></canvas>
+
+    <nav class="project-detail-nav glass-panel">
+        <a href="../index.html" class="logo">PS.</a>
+        <button id="theme-toggle" class="btn-outline" style="padding: 5px 10px; font-size: 0.6rem;">NIGHT</button>
+    </nav>
+
+    <div class="project-detail">
+        <a href="../index.html#projects" class="back-link">&lt; Back to Projects</a>
+
+        <div class="project-hero-section">
+            <h1>DripRead</h1>
+            <p class="project-tagline">Build a reading habit, one drip at a time</p>
+            <div class="tech-stack">
+                <span>App Dev</span>
+                <span>GenAI</span>
+                <span>Python</span>
+            </div>
+        </div>
+
+        <div class="project-section">
+            <h2><span class="label-badge">01</span> The Problem</h2>
+            <p>Most people want to start reading books but give up after just 1-2 days. The commitment of finishing an entire book feels overwhelming, and without a system to stay consistent, the habit never sticks. Traditional reading apps don't solve the consistency problem — they just give you the full book and expect you to figure it out.</p>
+        </div>
+
+        <div class="project-section">
+            <h2><span class="label-badge">02</span> The Solution</h2>
+            <p>DripRead breaks the reading barrier by delivering bite-sized book content on a schedule. Instead of facing a 300-page book, you get a manageable 5-10 page summary delivered daily at your chosen time — like a drip feed for your brain.</p>
+            <ul>
+                <li>Daily summaries of 5-10 pages sent at user-scheduled times</li>
+                <li>Continue reading the full book from where the summary left off</li>
+                <li>AI-powered summaries using Gemini API for intelligent compression</li>
+                <li>PDF and EPUB parsing for any book format</li>
+                <li>Progress tracking to visualize your reading streak</li>
+            </ul>
+        </div>
+
+        <div class="project-section">
+            <h2><span class="label-badge">03</span> Tech Stack</h2>
+            <ul>
+                <li>Mobile app development for the client experience</li>
+                <li>Python backend for PDF/EPUB parsing and processing</li>
+                <li>Gemini API integration for AI-generated summaries</li>
+                <li>Scheduled notification system for daily delivery</li>
+            </ul>
+        </div>
+
+        <div class="project-links">
+            <a href="https://play.google.com/store/apps/details?id=com.dripread" class="project-link" target="_blank" rel="noopener">Play Store &#8599;</a>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+
+</html>
