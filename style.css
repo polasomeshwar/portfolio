@@ -2,8 +2,9 @@
     --bg-color: #000000;
     --text-main: #ffffff;
     --text-muted: #aaaaaa;
-    --cyan: #ffffff;
-    --purple: #dddddd;
+    --cyan: #00FFFF;
+    --purple: #FF00FF;
+    --yellow: #FFFF00;
     --glass-bg: rgba(0, 0, 0, 0.8);
     --glass-border: rgba(255, 255, 255, 0.3);
 }
@@ -112,10 +113,16 @@ h3,
 }
 
 /* Text effect utilities replacing glow */
-.glow-text-cyan,
+.glow-text-cyan {
+    color: var(--cyan);
+    text-shadow: 2px 2px 0px rgba(0, 255, 255, 0.4);
+    position: relative;
+    display: inline-block;
+}
+
 .glow-text-purple {
-    color: var(--text-main);
-    text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.4);
+    color: var(--purple);
+    text-shadow: 2px 2px 0px rgba(255, 0, 255, 0.4);
     position: relative;
     display: inline-block;
 }
@@ -1254,11 +1261,11 @@ body.light-mode .hamburger span {
 .pac-chomper {
     width: 24px;
     height: 24px;
-    background: var(--text-main);
+    background: var(--yellow);
     clip-path: polygon(100% 50%, 40% 100%, 0% 100%, 0% 0%, 40% 0%);
     animation: pac-chomp 0.4s step-end infinite;
     flex-shrink: 0;
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
 @keyframes pac-chomp {
@@ -1288,9 +1295,9 @@ body.light-mode .hamburger span {
     width: 0px;
     height: 0px;
     border-right: 20px solid transparent;
-    border-top: 20px solid var(--text-main);
-    border-left: 20px solid var(--text-main);
-    border-bottom: 20px solid var(--text-main);
+    border-top: 20px solid var(--yellow);
+    border-left: 20px solid var(--yellow);
+    border-bottom: 20px solid var(--yellow);
     border-radius: 20px;
     animation: movePacman 8s linear infinite, bite 0.4s infinite;
     position: absolute;
