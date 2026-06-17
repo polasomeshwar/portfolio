@@ -430,7 +430,7 @@ body.light-mode .title {
 }
 
 .hero-image {
-    padding: 0;
+    padding: 0 !important;
     width: 220px;
     display: flex;
     justify-content: center;
